@@ -1,1 +1,32 @@
-
+[
+  {
+    "id": "attraction_001",
+    "name": "Jemaa el-Fnaa",
+    "category": "Attraction",
+    "location": "Medina, Marrakech",
+    "description": "The main square of Marrakech, used by locals and tourists. By day it is largely an open space; by night it transforms into a theater of folk groups, snake charmers, and food stalls.",
+    "safety_tips": "Be careful of pickpockets in crowded circles. Negotiate prices with snake charmers BEFORE taking photos.",
+    "budget": "Free to enter",
+    "tags": ["culture", "nightlife", "busy"]
+  },
+  {
+    "id": "transport_001",
+    "name": "Petit Taxi",
+    "category": "Transport",
+    "location": "Citywide",
+    "description": "Small beige/yellow taxis that carry up to 3 passengers. They are the most common way to move around Marrakech.",
+    "safety_tips": "Always ask the driver to turn on the meter (Compteur) immediately. If they refuse, find another taxi.",
+    "budget": "Low (10-30 MAD avg)",
+    "tags": ["transport", "taxi"]
+  },
+  {
+    "id": "food_001",
+    "name": "Tanjia Marrakchia",
+    "category": "Food",
+    "location": "Medina",
+    "description": "A traditional dish cooked in a clay pot (tangia) in the embers of a hammam furnace. It contains beef or lamb, preserved lemon, and saffron.",
+    "safety_tips": "Eat at reputable stalls where you see locals eating.",
+    "budget": "Medium (70-150 MAD)",
+    "tags": ["food", "tradition"]
+  }
+]

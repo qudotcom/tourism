@@ -6,3 +6,5 @@ langchain-community
 langchain-google-genai
 chromadb
 ujson
+duckduckgo-search
+huggingface_hub

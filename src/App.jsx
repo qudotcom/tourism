@@ -15,7 +15,7 @@ const TOURS_DATA = [
     title: "Les Villes Impériales",
     duration: "7 Jours",
     level: "Facile",
-    image: "bg-blue-900", // Placeholder couleur
+    image: "bg-blue-900",
     description: "Le circuit historique par excellence. Découvrez les quatre capitales historiques du Maroc : Marrakech, Fès, Meknès et Rabat.",
     itinerary: [
       { day: "Jour 1", title: "Arrivée à Marrakech", desc: "Installation au Riad, première immersion sur la place Jemaa el-Fna au coucher du soleil." },
@@ -67,7 +67,6 @@ const App = () => {
   const [activeView, setActiveView] = useState('guide');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Fonction de navigation
   const navigateTo = (view) => {
     setActiveView(view);
     setMobileMenuOpen(false);
@@ -75,13 +74,10 @@ const App = () => {
 
   return (
     <div className="flex h-[100dvh] w-full font-sans overflow-hidden text-slate-800 relative bg-kech-sand">
-      
-      {/* Overlay Mobile */}
       {mobileMenuOpen && (
         <div onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm lg:hidden transition-opacity" />
       )}
 
-      {/* --- SIDEBAR --- */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-kech-primary text-white transition-transform duration-300 ease-in-out shadow-2xl flex flex-col ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 flex-shrink-0`}>
         <div className="p-6 lg:p-8 border-b border-white/10 flex items-center justify-between">
           <div>
@@ -106,7 +102,6 @@ const App = () => {
         </div>
       </aside>
 
-      {/* --- MAIN CONTENT --- */}
       <main className="flex-1 flex flex-col h-full relative min-w-0 bg-kech-sand bg-zellij-pattern">
         <header className="lg:hidden p-4 bg-kech-primary text-white flex justify-between items-center shadow-md flex-shrink-0 z-30">
           <h1 className="font-serif text-lg font-bold text-kech-accent">ZELIG</h1>
@@ -125,10 +120,8 @@ const App = () => {
 };
 
 // ==========================================
-// VUES (COMPOSANTS)
+// VUE CHAT (MODIFIÉE POUR LE CENTRAGE)
 // ==========================================
-
-// 1. CHAT VIEW (Même logique, design affiné)
 const ChatView = () => {
   const [messages, setMessages] = useState([{ role: 'ai', content: 'Salam ! Je suis ton guide expert. Pose-moi une question sur le Maroc !' }]);
   const [input, setInput] = useState('');
@@ -157,25 +150,47 @@ const ChatView = () => {
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
         <div className="max-w-4xl mx-auto space-y-6 pb-4">
+          
+          {/* BANNIÈRE D'ACCUEIL */}
           {messages.length < 2 && (
              <div className="text-center py-12 animate-fade-in">
                 <div className="inline-flex p-5 rounded-full bg-white shadow-lg mb-6"><MapPin className="text-kech-secondary w-10 h-10" /></div>
-                <h2 className="text-4xl font-serif text-kech-primary font-bold mb-4">Marhba !</h2>
+                <h2 className="text-4xl font-serif text-kech-primary font-bold mb-4">MARHBA !</h2>
                 <p className="text-xl text-gray-600">Votre assistant personnel pour explorer le Royaume.</p>
              </div>
           )}
+
+          {/* LISTE DES MESSAGES */}
           {messages.map((msg, idx) => (
-            <div key={idx} className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div key={idx} className={`flex w-full ${
+              // MODIFICATION : Si c'est le 1er message (idx=0), on centre. Sinon, gauche/droite classique.
+              idx === 0 ? 'justify-center' : (msg.role === 'user' ? 'justify-end' : 'justify-start')
+            }`}>
               <div className={`flex max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} gap-3 items-end`}>
-                <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center shadow-md mb-1 ${msg.role === 'user' ? 'bg-kech-secondary text-white' : 'bg-white border border-kech-primary/20 text-kech-primary'}`}>{msg.role === 'user' ? 'Moi' : <Sparkles size={16} />}</div>
-                <div className={`p-4 lg:p-6 rounded-2xl shadow-sm text-base leading-relaxed backdrop-blur-sm ${msg.role === 'user' ? 'bg-kech-primary text-white rounded-br-none' : 'bg-white/95 border border-white/50 text-slate-800 rounded-bl-none'}`}>{msg.content}</div>
+                
+                {/* Avatar */}
+                <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center shadow-md mb-1 
+                  ${msg.role === 'user' ? 'bg-kech-secondary text-white' : 'bg-white border border-kech-primary/20 text-kech-primary'}`}>
+                  {msg.role === 'user' ? 'Moi' : <Sparkles size={16} />}
+                </div>
+                
+                {/* Bulle de texte */}
+                <div className={`p-4 lg:p-6 rounded-2xl shadow-sm text-base leading-relaxed backdrop-blur-sm 
+                  ${msg.role === 'user' ? 'bg-kech-primary text-white rounded-br-none' : 'bg-white/95 border border-white/50 text-slate-800 rounded-bl-none'}
+                  ${idx === 0 ? 'text-center font-medium' : ''} 
+                `}>
+                  {msg.content}
+                </div>
+
               </div>
             </div>
           ))}
+
           {loading && <div className="pl-14 text-sm text-gray-500 italic flex items-center gap-2"><div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div> Écriture en cours...</div>}
           <div ref={messagesEndRef} />
         </div>
       </div>
+
       <div className="p-4 bg-white/80 backdrop-blur-md border-t border-gray-100 z-20">
         <div className="max-w-4xl mx-auto">
           <form onSubmit={handleSend} className="flex items-center gap-2 bg-white p-2 pl-4 rounded-full shadow-lg border border-gray-200">
@@ -188,43 +203,34 @@ const ChatView = () => {
   );
 };
 
-// 2. TOUR VIEW (AVEC DÉTAILS FONCTIONNELS)
+// 2. TOUR VIEW
 const TourView = () => {
   const [selectedTour, setSelectedTour] = useState(null);
 
   if (selectedTour) {
-    // VUE DÉTAIL
     return (
       <div className="h-full overflow-y-auto p-4 md:p-8 animate-fade-in bg-white/50">
         <button onClick={() => setSelectedTour(null)} className="flex items-center gap-2 text-kech-primary font-bold mb-6 hover:underline">
           <ArrowLeft size={20} /> Retour aux circuits
         </button>
-        
         <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-white/50">
           <div className={`h-48 ${selectedTour.image} relative`}>
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
               <h2 className="text-4xl font-serif text-white font-bold text-center px-4">{selectedTour.title}</h2>
             </div>
           </div>
-          
           <div className="p-8">
             <div className="flex gap-4 mb-8 text-sm font-bold text-gray-500 uppercase tracking-wide">
               <span className="flex items-center gap-1"><Clock size={16}/> {selectedTour.duration}</span>
               <span className="flex items-center gap-1"><Map size={16}/> {selectedTour.level}</span>
             </div>
-            
-            <p className="text-xl text-gray-700 mb-8 font-light italic border-l-4 border-kech-accent pl-4">
-              {selectedTour.description}
-            </p>
-
+            <p className="text-xl text-gray-700 mb-8 font-light italic border-l-4 border-kech-accent pl-4">{selectedTour.description}</p>
             <h3 className="text-2xl font-serif text-kech-primary mb-6">Itinéraire Détaillé</h3>
             <div className="space-y-6">
               {selectedTour.itinerary.map((step, idx) => (
                 <div key={idx} className="flex gap-4">
                   <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 rounded-full bg-kech-primary text-white flex items-center justify-center font-bold text-sm shrink-0">
-                      {idx + 1}
-                    </div>
+                    <div className="w-8 h-8 rounded-full bg-kech-primary text-white flex items-center justify-center font-bold text-sm shrink-0">{idx + 1}</div>
                     {idx !== selectedTour.itinerary.length - 1 && <div className="w-0.5 h-full bg-gray-200 my-1"></div>}
                   </div>
                   <div className="pb-6">
@@ -235,25 +241,16 @@ const TourView = () => {
                 </div>
               ))}
             </div>
-            
-            <div className="mt-8 pt-8 border-t border-gray-100 text-center">
-              <button className="px-8 py-3 bg-kech-secondary text-white rounded-full font-bold shadow-lg hover:bg-orange-700 transition transform active:scale-95">
-                Réserver ce circuit
-              </button>
-              <p className="text-xs text-gray-400 mt-2">Redirection vers nos partenaires locaux (Simulation)</p>
-            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  // VUE LISTE
   return (
     <div className="h-full overflow-y-auto p-4 md:p-8 animate-fade-in">
       <h2 className="text-3xl md:text-4xl font-serif text-kech-primary font-bold mb-2">Le Grand Tour</h2>
       <p className="text-gray-600 mb-8">Sélectionnez un itinéraire pour voir le détail jour par jour.</p>
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {TOURS_DATA.map((tour) => (
           <div key={tour.id} className="bg-white rounded-xl shadow-glass border border-white/50 overflow-hidden hover:shadow-2xl transition-all duration-300 group">
@@ -267,13 +264,7 @@ const TourView = () => {
               </div>
               <h3 className="font-bold text-xl text-slate-800 mb-3">{tour.title}</h3>
               <p className="text-sm text-gray-600 line-clamp-2 mb-6">{tour.description}</p>
-              
-              <button 
-                onClick={() => setSelectedTour(tour)}
-                className="w-full py-3 border border-kech-primary text-kech-primary rounded-lg font-bold hover:bg-kech-primary hover:text-white transition flex items-center justify-center gap-2 group-hover:gap-3"
-              >
-                Voir le détail <ChevronRight size={16} />
-              </button>
+              <button onClick={() => setSelectedTour(tour)} className="w-full py-3 border border-kech-primary text-kech-primary rounded-lg font-bold hover:bg-kech-primary hover:text-white transition flex items-center justify-center gap-2 group-hover:gap-3">Voir le détail <ChevronRight size={16} /></button>
             </div>
           </div>
         ))}
@@ -282,35 +273,24 @@ const TourView = () => {
   );
 };
 
-// 3. CARNET DE ROUTE (FONCTIONNEL - LOCALSTORAGE)
+// 3. CARNET DE ROUTE
 const CarnetView = () => {
-  // Charge les notes depuis le navigateur au démarrage
   const [notes, setNotes] = useState(() => {
     const saved = localStorage.getItem('zelig_notes');
     return saved ? JSON.parse(saved) : [];
   });
   const [newNote, setNewNote] = useState('');
 
-  // Sauvegarde à chaque changement
-  useEffect(() => {
-    localStorage.setItem('zelig_notes', JSON.stringify(notes));
-  }, [notes]);
+  useEffect(() => { localStorage.setItem('zelig_notes', JSON.stringify(notes)); }, [notes]);
 
   const addNote = (e) => {
     e.preventDefault();
     if (!newNote.trim()) return;
-    const noteObject = {
-      id: Date.now(),
-      text: newNote,
-      date: new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })
-    };
-    setNotes([noteObject, ...notes]);
+    setNotes([{ id: Date.now(), text: newNote, date: new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }) }, ...notes]);
     setNewNote('');
   };
 
-  const deleteNote = (id) => {
-    setNotes(notes.filter(n => n.id !== id));
-  };
+  const deleteNote = (id) => setNotes(notes.filter(n => n.id !== id));
 
   return (
     <div className="h-full overflow-y-auto p-4 md:p-8 animate-fade-in flex flex-col items-center">
@@ -320,42 +300,16 @@ const CarnetView = () => {
           <h2 className="text-3xl font-serif text-kech-primary font-bold">Carnet de Voyage</h2>
           <p className="text-gray-600">Notez vos coups de cœur et souvenirs. Ils sont sauvegardés automatiquement.</p>
         </div>
-
-        {/* Input */}
         <form onSubmit={addNote} className="relative flex items-center gap-2 mb-8">
-          <input 
-            type="text" 
-            value={newNote}
-            onChange={(e) => setNewNote(e.target.value)}
-            placeholder="Ajouter une note (ex: Restaurant Dar Yacout à 20h)..."
-            className="w-full p-4 pl-6 rounded-full shadow-lg border-none outline-none focus:ring-2 focus:ring-kech-secondary/50"
-          />
-          <button type="submit" className="absolute right-2 w-10 h-10 bg-kech-primary text-white rounded-full flex items-center justify-center hover:bg-blue-900 transition shadow-md">
-            <Plus size={20} />
-          </button>
+          <input type="text" value={newNote} onChange={(e) => setNewNote(e.target.value)} placeholder="Ajouter une note..." className="w-full p-4 pl-6 rounded-full shadow-lg border-none outline-none focus:ring-2 focus:ring-kech-secondary/50" />
+          <button type="submit" className="absolute right-2 w-10 h-10 bg-kech-primary text-white rounded-full flex items-center justify-center hover:bg-blue-900 transition shadow-md"><Plus size={20} /></button>
         </form>
-
-        {/* Liste des Notes */}
         <div className="space-y-4">
-          {notes.length === 0 && (
-            <div className="text-center text-gray-400 py-10 italic bg-white/50 rounded-xl border border-dashed border-gray-300">
-              Votre carnet est vide pour l'instant.
-            </div>
-          )}
-          
+          {notes.length === 0 && <div className="text-center text-gray-400 py-10 italic bg-white/50 rounded-xl border border-dashed border-gray-300">Votre carnet est vide pour l'instant.</div>}
           {notes.map(note => (
             <div key={note.id} className="bg-white p-5 rounded-xl shadow-sm border border-white/50 flex justify-between items-start group hover:shadow-md transition">
-              <div>
-                <p className="text-slate-800 text-lg leading-relaxed">{note.text}</p>
-                <span className="text-xs text-gray-400 mt-2 block flex items-center gap-1"><Calendar size={12}/> {note.date}</span>
-              </div>
-              <button 
-                onClick={() => deleteNote(note.id)}
-                className="text-gray-300 hover:text-red-500 transition p-2"
-                title="Supprimer"
-              >
-                <Trash2 size={18} />
-              </button>
+              <div><p className="text-slate-800 text-lg leading-relaxed">{note.text}</p><span className="text-xs text-gray-400 mt-2 block flex items-center gap-1"><Calendar size={12}/> {note.date}</span></div>
+              <button onClick={() => deleteNote(note.id)} className="text-gray-300 hover:text-red-500 transition p-2" title="Supprimer"><Trash2 size={18} /></button>
             </div>
           ))}
         </div>
@@ -364,32 +318,29 @@ const CarnetView = () => {
   );
 };
 
-// 4. SAFETY VIEW (Design finalisé)
+// 4. SAFETY VIEW
 const SafetyView = () => (
   <div className="h-full overflow-y-auto p-4 md:p-8 animate-fade-in">
     <h2 className="text-3xl font-serif text-kech-primary font-bold mb-6">Sécurité & Urgences</h2>
-    
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-8">
       <EmergencyCard icon={<Phone/>} title="Police" number="19" color="red" />
       <EmergencyCard icon={<ShieldAlert/>} title="Ambulance" number="15" color="orange" />
       <EmergencyCard icon={<ShieldAlert/>} title="Gendarmerie" number="177" color="blue" />
     </div>
-
     <div className="bg-white/90 backdrop-blur rounded-2xl p-6 md:p-8 shadow-glass border border-white/50">
       <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2"><CheckCircle className="text-green-600"/> Conseils vérifiés</h3>
       <div className="space-y-6">
-        <SafetyItem badge="IMPORTANT" title="Taxis & Transport" text="Exigez toujours le compteur. À Marrakech, le tarif minimum est de 7 Dhs. Si le chauffeur refuse, changez de taxi. Les petits taxis ne sortent pas de la ville." />
+        <SafetyItem badge="IMPORTANT" title="Taxis & Transport" text="Exigez toujours le compteur. À Marrakech, le tarif minimum est de 7 Dhs. Si le chauffeur refuse, changez de taxi." />
         <div className="h-px bg-gray-100 w-full"></div>
-        <SafetyItem badge="SANTÉ" title="Eau & Nourriture" text="L'eau du robinet est potable dans les grandes villes mais chlorée. Préférez l'eau en bouteille (Sidi Ali, Ain Saiss). La 'tourista' est fréquente : lavez-vous les mains souvent." />
+        <SafetyItem badge="SANTÉ" title="Eau & Nourriture" text="Préférez l'eau en bouteille (Sidi Ali, Ain Saiss). La 'tourista' est fréquente : lavez-vous les mains souvent." />
         <div className="h-px bg-gray-100 w-full"></div>
-        <SafetyItem badge="ARNAC" title="Faux Guides" text="Dans les Médinas, ne suivez jamais quelqu'un qui vous aborde pour vous dire 'C'est fermé par là'. C'est toujours faux. Continuez votre chemin." />
+        <SafetyItem badge="ARNAC" title="Faux Guides" text="Dans les Médinas, ne suivez jamais quelqu'un qui vous aborde pour vous dire 'C'est fermé par là'. Continuez votre chemin." />
       </div>
     </div>
   </div>
 );
 
 // --- COMPOSANTS UTILITAIRES ---
-
 const NavItem = ({ icon, label, isActive, onClick }) => (
   <button onClick={onClick} className={`w-full flex items-center gap-4 px-4 py-3 lg:py-4 rounded-xl transition-all duration-200 group mb-1 text-left ${isActive ? 'bg-white/10 text-white border-r-4 border-kech-accent font-semibold shadow-inner' : 'text-blue-100 hover:bg-white/5 hover:text-white'}`}>
     <span className={`${isActive ? 'text-kech-accent' : 'group-hover:text-white transition-colors'}`}>{icon}</span>
@@ -398,11 +349,7 @@ const NavItem = ({ icon, label, isActive, onClick }) => (
 );
 
 const EmergencyCard = ({ icon, title, number, color }) => {
-  const colors = {
-    red: "bg-red-50 text-red-700 border-red-100",
-    orange: "bg-orange-50 text-orange-700 border-orange-100",
-    blue: "bg-blue-50 text-blue-700 border-blue-100"
-  };
+  const colors = { red: "bg-red-50 text-red-700 border-red-100", orange: "bg-orange-50 text-orange-700 border-orange-100", blue: "bg-blue-50 text-blue-700 border-blue-100" };
   return (
     <div className={`${colors[color]} p-6 rounded-2xl border flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md transition`}>
       <div className="mb-2 opacity-80">{icon}</div>
@@ -415,10 +362,7 @@ const EmergencyCard = ({ icon, title, number, color }) => {
 const SafetyItem = ({ badge, title, text }) => (
   <div className="flex gap-4 items-start">
     <span className="bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded h-fit shrink-0 mt-1">{badge}</span>
-    <div>
-      <h4 className="font-bold text-slate-800 text-lg">{title}</h4>
-      <p className="text-gray-600 leading-relaxed text-sm lg:text-base">{text}</p>
-    </div>
+    <div><h4 className="font-bold text-slate-800 text-lg">{title}</h4><p className="text-gray-600 leading-relaxed text-sm lg:text-base">{text}</p></div>
   </div>
 );
 

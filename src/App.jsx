@@ -9,15 +9,12 @@ const App = () => {
   const [messages, setMessages] = useState([
     { 
       role: 'ai', 
-      content: 'Salam ! Bienvenue dans la Ville Rouge. Je suis ton guide personnel. Une question sur la Medina, les prix ou la sécurité ?' 
+      content: 'Salam ! Bienvenue au Maroc. Je suis ton guide personnel à travers le Royaume. Des montagnes de l\'Atlas aux plages d\'Essaouira, que veux-tu découvrir ?' 
     }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  // Sur mobile, le menu est fermé par défaut. Sur Desktop, CSS gère l'affichage.
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -42,10 +39,9 @@ const App = () => {
   };
 
   return (
-    // h-[100dvh] est CRUCIAL pour mobile (évite que la barre d'adresse cache l'input)
-    <div className="flex h-[100dvh] w-full bg-kech-sand font-sans overflow-hidden text-slate-800 relative">
+    <div className="flex h-[100dvh] w-full font-sans overflow-hidden text-slate-800 relative">
       
-      {/* --- OVERLAY MOBILE (Fond noir quand le menu est ouvert) --- */}
+      {/* --- OVERLAY MOBILE --- */}
       {mobileMenuOpen && (
         <div 
           onClick={() => setMobileMenuOpen(false)}
@@ -53,10 +49,7 @@ const App = () => {
         />
       )}
 
-      {/* --- SIDEBAR HYBRIDE --- 
-          Mobile: Fixed + Z-index haut + Slide In/Out
-          Desktop: Relative + Toujours visible
-      */}
+      {/* --- SIDEBAR (Gauche) --- */}
       <aside 
         className={`fixed inset-y-0 left-0 z-50 w-72 bg-kech-primary text-white transition-transform duration-300 ease-in-out shadow-2xl flex flex-col
         ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
@@ -65,38 +58,37 @@ const App = () => {
         <div className="p-6 lg:p-8 border-b border-white/10 flex items-center justify-between">
           <div>
             <h1 className="font-serif text-2xl lg:text-3xl font-bold tracking-widest text-kech-accent">ZELIG</h1>
-            <p className="text-[10px] lg:text-xs text-blue-200 tracking-wider mt-1 uppercase">Digital Marrakech</p>
+            <p className="text-[10px] lg:text-xs text-blue-200 tracking-wider mt-1 uppercase">Digital Morocco</p>
           </div>
-          {/* Bouton Fermer (Visible uniquement sur Mobile) */}
           <button onClick={() => setMobileMenuOpen(false)} className="lg:hidden text-white/80 hover:text-white p-2">
             <X size={24} />
           </button>
         </div>
 
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-          <NavItem icon={<Sparkles size={20}/>} label="Guide IA" active />
-          <NavItem icon={<Navigation size={20}/>} label="Planificateur" />
-          <NavItem icon={<ShieldAlert size={20}/>} label="Scanner Sécurité" />
-          <NavItem icon={<Camera size={20}/>} label="Moments Sociaux" />
+          <NavItem icon={<Sparkles size={20}/>} label="Guide Royal IA" active />
+          <NavItem icon={<Navigation size={20}/>} label="Grand Tour" />
+          <NavItem icon={<ShieldAlert size={20}/>} label="Sécurité Voyage" />
+          <NavItem icon={<Camera size={20}/>} label="Carnet de Route" />
         </nav>
 
         <div className="p-6 border-t border-white/10 bg-black/20 mt-auto">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-kech-accent flex items-center justify-center text-kech-primary font-bold font-serif shadow-lg">
-              T
+              M
             </div>
             <div>
-              <p className="text-sm font-bold">Profil Touriste</p>
+              <p className="text-sm font-bold">Profil Voyageur</p>
               <p className="text-xs text-blue-200">Préférences</p>
             </div>
           </div>
         </div>
       </aside>
 
-      {/* --- CONTENU PRINCIPAL --- */}
-      <main className="flex-1 flex flex-col h-full relative min-w-0 bg-kech-sand">
+      {/* --- CONTENU PRINCIPAL (Droite avec Texture) --- */}
+      <main className="flex-1 flex flex-col h-full relative min-w-0 bg-kech-sand bg-zellij-pattern">
         
-        {/* Header Mobile (Visible uniquement sur petits écrans) */}
+        {/* Header Mobile */}
         <header className="lg:hidden p-4 bg-kech-primary text-white flex justify-between items-center shadow-md flex-shrink-0 z-30">
           <h1 className="font-serif text-lg font-bold text-kech-accent">ZELIG</h1>
           <button onClick={() => setMobileMenuOpen(true)} className="p-1 active:scale-95 transition-transform">
@@ -110,15 +102,15 @@ const App = () => {
             
             {/* Bannière de Bienvenue */}
             {messages.length < 3 && (
-              <div className="text-center py-8 lg:py-12 animate-fade-in px-2">
-                <div className="inline-flex p-4 lg:p-5 rounded-full bg-white shadow-lg mb-4 lg:mb-6 ring-1 ring-kech-secondary/20">
+              <div className="text-center py-8 lg:py-16 animate-fade-in px-2">
+                <div className="inline-flex p-4 lg:p-5 rounded-full bg-white/90 shadow-lg mb-4 lg:mb-6 ring-1 ring-kech-secondary/20 backdrop-blur-sm">
                   <MapPin className="text-kech-secondary w-8 h-8 lg:w-10 lg:h-10" />
                 </div>
-                <h2 className="text-3xl lg:text-5xl font-serif text-kech-primary font-bold mb-3 lg:mb-4 leading-tight">
-                  Marrakech vous attend
+                <h2 className="text-3xl lg:text-5xl font-serif text-kech-primary font-bold mb-3 lg:mb-4 leading-tight drop-shadow-sm">
+                  Explorez le Royaume
                 </h2>
-                <p className="text-base lg:text-xl text-gray-600 max-w-2xl mx-auto font-light leading-relaxed">
-                  Votre compagnon intelligent 24/7. Riads, Sécurité, Culture, Zellige.
+                <p className="text-base lg:text-xl text-gray-700 max-w-2xl mx-auto font-light leading-relaxed bg-kech-sand/60 rounded-lg p-2 backdrop-blur-[2px]">
+                  Votre compagnon intelligent à travers le Maroc. Villes impériales, désert, sécurité et culture.
                 </p>
               </div>
             )}
@@ -138,10 +130,10 @@ const App = () => {
                   </div>
 
                   {/* Bulle */}
-                  <div className={`p-4 lg:p-6 rounded-2xl shadow-sm text-base lg:text-lg leading-relaxed relative
+                  <div className={`p-4 lg:p-6 rounded-2xl shadow-sm text-base lg:text-lg leading-relaxed relative backdrop-blur-sm
                     ${msg.role === 'user' 
                       ? 'bg-kech-primary text-white rounded-br-none shadow-kech-primary/20' 
-                      : 'bg-white border border-white/50 text-slate-800 rounded-bl-none shadow-sm'
+                      : 'bg-white/95 border border-white/50 text-slate-800 rounded-bl-none shadow-sm'
                     }`}>
                     {msg.content}
                   </div>
@@ -152,7 +144,7 @@ const App = () => {
             {/* Loading */}
             {loading && (
               <div className="flex w-full justify-start pl-12 lg:pl-14">
-                <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-none flex gap-2 items-center shadow-sm border border-gray-100">
+                <div className="bg-white/90 px-4 py-3 rounded-2xl rounded-bl-none flex gap-2 items-center shadow-sm border border-gray-100 backdrop-blur-sm">
                    <span className="w-2 h-2 bg-kech-primary rounded-full animate-bounce"></span>
                    <span className="w-2 h-2 bg-kech-primary rounded-full animate-bounce delay-100"></span>
                    <span className="w-2 h-2 bg-kech-primary rounded-full animate-bounce delay-200"></span>
@@ -164,17 +156,17 @@ const App = () => {
         </div>
 
         {/* --- ZONE DE SAISIE --- */}
-        <div className="p-3 lg:p-6 bg-white/80 backdrop-blur-md lg:bg-gradient-to-t lg:from-kech-sand lg:via-kech-sand lg:to-transparent flex-shrink-0 border-t lg:border-none border-gray-100 z-20">
+        <div className="p-3 lg:p-6 bg-white/70 backdrop-blur-md border-t lg:border-none border-gray-100 z-20 flex-shrink-0">
           <div className="max-w-4xl mx-auto">
             <form 
               onSubmit={handleSend}
-              className="relative flex items-center gap-2 lg:gap-4 bg-white p-2 lg:pl-6 rounded-full shadow-lg lg:shadow-2xl border border-gray-200 focus-within:ring-2 focus-within:ring-kech-secondary/50 transition-all"
+              className="relative flex items-center gap-2 lg:gap-4 bg-white p-2 lg:pl-6 rounded-full shadow-lg border border-gray-200 focus-within:ring-2 focus-within:ring-kech-secondary/50 transition-all"
             >
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Posez votre question..."
+                placeholder="Posez votre question sur le Maroc..."
                 className="flex-1 bg-transparent border-none outline-none text-gray-700 text-base lg:text-lg placeholder:text-gray-400 h-10 lg:h-12 pl-3 lg:pl-0"
               />
               <button 
@@ -186,7 +178,9 @@ const App = () => {
               </button>
             </form>
             <div className="text-center mt-2 lg:mt-3 hidden lg:block">
-               <p className="text-[10px] lg:text-xs text-gray-400 font-medium tracking-wide">PROPULSÉ PAR ATLAS AI & GEMINI • CONTEXTE MAROCAIN</p>
+               <p className="text-[10px] lg:text-xs text-gray-500 font-medium tracking-wide shadow-sm">
+                 PROPULSÉ PAR ATLAS AI & GEMINI • CONTEXTE MAROCAIN
+               </p>
             </div>
           </div>
         </div>
@@ -196,7 +190,6 @@ const App = () => {
   );
 };
 
-// Composant NavItem amélioré
 const NavItem = ({ icon, label, active = false }) => (
   <button className={`w-full flex items-center gap-4 px-4 py-3 lg:py-4 rounded-xl transition-all duration-200 group mb-1
     ${active 
